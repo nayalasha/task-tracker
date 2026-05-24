@@ -1,25 +1,41 @@
 from tkinter import *
 window=Tk()
 window.geometry("500x500")
-window.title("My First GUI")
+window.title("Task Tracker")
 
 # button
 def click():
     print("Button Clicked")
 
+def submit():
+    task = entry.get()
+    print(f"Task Added: {task}")
 
 
-button = Button(window,
+
+submit_button = Button(window,
                     text="Add Task",
-                    command=click,
+                    command=submit,
                     font=("Arial", 20),
-                    fg="white",
+                    fg="black",
                     bg="#1E90FF",
                     activeforeground="white",
                     activebackground="#0b66d0",
                     bd=4,
                     relief=RAISED,
+                    state=ACTIVE
                    )
+submit_button.pack(side=RIGHT, padx=10)
+
+
+
+entry = Entry(window,
+              font=("Arial", 
+                    40,
+                    
+                    )
+              )
+entry.pack(side=LEFT)
 
 # use pack for consistent layout so the button's text is visible
 
@@ -38,9 +54,9 @@ label = Label(window, text="Task Tracker",
 label.pack(pady=20)
 
 # show the button below the label
-button.pack(pady=10)
+
 # ensure the button is above other widgets and redraw immediately
-button.lift()
+submit_button.lift()
 window.update()
 
 window.mainloop()
