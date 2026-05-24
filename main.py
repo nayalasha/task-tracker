@@ -1,6 +1,6 @@
 from tkinter import *
 window=Tk()
-window.geometry("500x500")
+window.geometry("1280x720")
 window.title("Task Tracker")
 
 # button
@@ -27,16 +27,40 @@ submit_button = Button(window,
                    )
 submit_button.pack(side=RIGHT, padx=10)
 
-
+# text box for task input
 
 entry = Entry(window,
               font=("Arial", 
-                    40,
-                    
-                    )
+                    40,),
+                fg="black",
+                bg="white",
+
+
               )
+entry.insert(0, "Enter your task here")
 entry.pack(side=LEFT)
 
+x = IntVar()
+
+def display():
+    if x.get() == 1:
+        print("Task marked as completed")
+    else:
+        print("Task marked as not completed")
+
+check_button = Checkbutton(window,
+                           text="Mark as Completed",
+                       font=("Arial", 20),
+                          fg="black",
+                            bg="lightblue",
+                            variable= x,
+                            onvalue=1,
+                            offvalue=0,
+                            command=display,
+                            
+
+                      )
+check_button.pack(side=BOTTOM)
 # use pack for consistent layout so the button's text is visible
 
 
