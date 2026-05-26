@@ -40,27 +40,7 @@ entry = Entry(window,
 entry.insert(0, "Enter your task here")
 entry.pack(side=LEFT)
 
-x = IntVar()
 
-def display():
-    if x.get() == 1:
-        print("Task marked as completed")
-    else:
-        print("Task marked as not completed")
-
-check_button = Checkbutton(window,
-                           text="Mark as Completed",
-                       font=("Arial", 20),
-                          fg="black",
-                            bg="lightblue",
-                            variable= x,
-                            onvalue=1,
-                            offvalue=0,
-                            command=display,
-                            
-
-                      )
-check_button.pack(side=BOTTOM)
 # use pack for consistent layout so the button's text is visible
 
 
