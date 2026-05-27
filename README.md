@@ -1,4 +1,4 @@
-# Task Tracker
+# Task Tracker (COMPLETE 🎉🎉🎉)
 
 A simple desktop task management app built with Python and Tkinter.
 
