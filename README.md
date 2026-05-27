@@ -29,7 +29,7 @@ A simple desktop task management app built with Python and Tkinter.
 - [x] Delete tasks
 - [x] Save tasks to file
 - [x] Mark tasks as complete
-- [ ] Dark mode
+- [x] Dark mode
 - [ ] Due dates
 - [ ] Task priorities
 
