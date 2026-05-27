@@ -3,7 +3,60 @@ from tkinter import *
 window = Tk()
 window.geometry("1280x720")
 window.title("Task Tracker")
-window.config(background="lightblue")
+
+
+
+# FUNCTION TO CHANGE BACKGROUND
+def change_mode(selected_color):
+    window.config(background=selected_color)
+
+    # optional: update label backgrounds too
+    label.config(bg=selected_color)
+
+
+# DEFAULT MODE
+mode = "lightblue"
+
+# VARIABLE
+mode_var = StringVar(value=mode)
+
+
+# LABEL
+label = Label(
+    window,
+    text="Task Tracker",
+    font=("Arial", 40, "bold"),
+    bg=mode
+)
+
+label.pack(pady=20)
+
+
+# DROPDOWN MENU
+mode_menu = OptionMenu(
+    window,
+    mode_var,
+    "lightblue",
+    "lightgray",
+    "lightyellow",
+    "lightgreen",
+    "lightpink",
+    command=change_mode
+)
+
+mode_menu.config(
+    font=("Arial", 12),
+    bg="white",
+    fg="black"
+)
+
+mode_menu.pack(pady=10)
+
+
+window.config(background=mode)
+
+
+
 
 
 # ---------------- FUNCTIONS ---------------- #
@@ -60,16 +113,7 @@ def complete_task():
 
 # ---------------- UI ---------------- #
 
-label = Label(
-    window,
-    text="Task Tracker",
-    font=("Arial", 40, 'bold'),
-    fg="black",
-    bg="lightblue",
-    relief=RAISED,
-    bd=10,
-)
-label.pack(pady=20)
+
 
 
 entry = Entry(
