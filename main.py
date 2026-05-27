@@ -1,16 +1,15 @@
+
 from tkinter import *
 
 window = Tk()
-window.geometry("1280x720")
+window.geometry("1920x1080")
 window.title("Task Tracker")
 
 
-
 # FUNCTION TO CHANGE BACKGROUND
+# ---------------- FUNCTIONS ---------------- #
 def change_mode(selected_color):
     window.config(background=selected_color)
-
-    # optional: update label backgrounds too
     label.config(bg=selected_color)
 
 
@@ -20,6 +19,87 @@ mode = "lightblue"
 # VARIABLE
 mode_var = StringVar(value=mode)
 
+
+# SAVE TASKS
+# ---------------- FUNCTIONS ---------------- #
+def save_tasks():
+    tasks = task_listbox.get(0, END)
+
+    with open("tasks.txt", "w") as file:
+        for task in tasks:
+            file.write(task + "\n")
+
+
+# LOAD TASKS
+# ---------------- FUNCTIONS ---------------- #
+def load_tasks():
+    try:
+        with open("tasks.txt", "r") as file:
+            tasks = file.readlines()
+
+            for task in tasks:
+                task_listbox.insert(END, task.strip())
+
+    except FileNotFoundError:
+        pass
+
+
+# ADD TASK
+# ---------------- FUNCTIONS ---------------- #
+def submit():
+    task = entry.get()
+    due_date = due_entry.get()
+    priority = priority_var.get()
+
+    if task != "":
+        full_task = f"[{priority}] {task} | Due: {due_date}"
+
+        task_listbox.insert(END, full_task)
+
+        # COLOR CODE PRIORITIES
+        index = task_listbox.size() - 1
+
+        if priority == "High":
+            task_listbox.itemconfig(index, fg="red")
+
+        elif priority == "Medium":
+            task_listbox.itemconfig(index, fg="orange")
+
+        elif priority == "Low":
+            task_listbox.itemconfig(index, fg="green")
+
+        entry.delete(0, END)
+        due_entry.delete(0, END)
+
+        save_tasks()
+
+
+# DELETE TASK
+# ---------------- FUNCTIONS ---------------- #
+def delete_task():
+    task_listbox.delete(ANCHOR)
+    save_tasks()
+
+
+# COMPLETE TASK
+# ---------------- FUNCTIONS ---------------- #
+def complete_task():
+    selected = task_listbox.curselection()
+
+    if selected:
+        index = selected[0]
+        task = task_listbox.get(index)
+
+        if not task.startswith("✔ "):
+            task_listbox.delete(index)
+            task_listbox.insert(index, "✔ " + task)
+
+            task_listbox.itemconfig(index, fg="gray")
+
+        save_tasks()
+
+
+# ---------------- UI ---------------- #
 
 # LABEL
 label = Label(
@@ -32,7 +112,7 @@ label = Label(
 label.pack(pady=20)
 
 
-# DROPDOWN MENU
+# DROPDOWN MENU FOR BACKGROUND
 mode_menu = OptionMenu(
     window,
     mode_var,
@@ -52,70 +132,10 @@ mode_menu.config(
 
 mode_menu.pack(pady=10)
 
-
 window.config(background=mode)
 
 
-
-
-
-# ---------------- FUNCTIONS ---------------- #
-
-def save_tasks():
-    tasks = task_listbox.get(0, END)
-
-    with open("tasks.txt", "w") as file:
-        for task in tasks:
-            file.write(task + "\n")
-
-
-def load_tasks():
-    try:
-        with open("tasks.txt", "r") as file:
-            tasks = file.readlines()
-
-            for task in tasks:
-                task_listbox.insert(END, task.strip())
-
-    except FileNotFoundError:
-        pass
-
-
-def submit():
-    task = entry.get()
-
-    if task != "":
-        task_listbox.insert(END, task)
-        entry.delete(0, END)
-        save_tasks()
-
-
-def delete_task():
-    task_listbox.delete(ANCHOR)
-    save_tasks()
-
-
-def complete_task():
-    selected = task_listbox.curselection()
-
-    if selected:
-        index = selected[0]
-        task = task_listbox.get(index)
-
-        if not task.startswith("✔ "):
-            task_listbox.delete(index)
-            task_listbox.insert(index, "✔ " + task)
-
-            task_listbox.itemconfig(index, fg="gray")
-
-        save_tasks()
-
-
-# ---------------- UI ---------------- #
-
-
-
-
+# TASK ENTRY
 entry = Entry(
     window,
     font=("Arial", 30),
@@ -126,6 +146,41 @@ entry = Entry(
 entry.pack(pady=10)
 
 
+# DUE DATE ENTRY
+due_entry = Entry(
+    window,
+    font=("Arial", 20),
+    fg="black",
+    bg="white",
+    width=25
+)
+
+due_entry.insert(0, "YYYY-MM-DD")
+due_entry.pack(pady=5)
+
+
+# PRIORITY DROPDOWN
+priority_var = StringVar()
+priority_var.set("Medium")
+
+priority_menu = OptionMenu(
+    window,
+    priority_var,
+    "Low",
+    "Medium",
+    "High"
+)
+
+priority_menu.config(
+    font=("Arial", 12),
+    bg="white",
+    fg="black"
+)
+
+priority_menu.pack(pady=5)
+
+
+# ADD TASK BUTTON
 submit_button = Button(
     window,
     text="Add Task",
@@ -137,17 +192,20 @@ submit_button = Button(
 submit_button.pack(pady=10)
 
 
+# TASK LISTBOX
 task_listbox = Listbox(
     window,
     font=("Arial", 20),
     bg="white",
     fg="black",
-    width=50,
-    height=10
+    width=60,
+    height=12
 )
+
 task_listbox.pack(pady=20)
 
 
+# DELETE BUTTON
 delete_button = Button(
     window,
     text="Delete Task",
@@ -156,9 +214,11 @@ delete_button = Button(
     fg="black",
     bg="#FF6347"
 )
+
 delete_button.pack(pady=10)
 
 
+# COMPLETE BUTTON
 complete_button = Button(
     window,
     text="Complete Task",
@@ -167,8 +227,11 @@ complete_button = Button(
     fg="black",
     bg="#32CD32"
 )
+
 complete_button.pack(pady=10)
 
+
+# SAVE BUTTON
 save_button = Button(
     window,
     text="Save Tasks",
@@ -182,7 +245,7 @@ save_button.pack(pady=10)
 
 
 # ---------------- STARTUP LOAD ---------------- #
-
 load_tasks()
 
 window.mainloop()
+
